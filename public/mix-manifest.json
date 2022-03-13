@@ -1,0 +1,13 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/css/grapes.min.css": "/css/grapes.min.css",
+    "/css/grapesjs-preset-webpage.min.css": "/css/grapesjs-preset-webpage.min.css",
+    "/js/grapes.min.js": "/js/grapes.min.js",
+    "/js/grapesjs-preset-webpage.min.js": "/js/grapesjs-preset-webpage.min.js",
+    "/js/grapes.min.js.map": "/js/grapes.min.js.map",
+    "/fonts/main-fonts.eot": "/fonts/main-fonts.eot",
+    "/fonts/main-fonts.svg": "/fonts/main-fonts.svg",
+    "/fonts/main-fonts.ttf": "/fonts/main-fonts.ttf",
+    "/fonts/main-fonts.woff": "/fonts/main-fonts.woff"
+}
