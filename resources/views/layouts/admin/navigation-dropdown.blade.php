@@ -83,7 +83,7 @@
                                       <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
                                       </path>
                                   </svg>
-                                  <span>{{ __('Profile') }}</span>
+                                  <span>{{ __('Perfil') }}</span>
                               </a>
                           </li>
                           @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
@@ -167,7 +167,7 @@
                                           <path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
                                           </path>
                                       </svg>
-                                      <span>{{ __('Logout') }}</span>
+                                      <span>{{ __('Salir') }}</span>
                                   </a>
                               </li>
                           </form>

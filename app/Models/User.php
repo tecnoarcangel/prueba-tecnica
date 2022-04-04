@@ -96,4 +96,9 @@ class User extends Authenticatable
     {
         return $this->created_at->format('M, d Y');
     }
+
+    public function archivos()
+    {
+        return $this->hasMany(Archivo::class,'usuario_id','id');
+    }
 }
