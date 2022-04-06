@@ -22,13 +22,25 @@
 
     <label class="block text-sm">
         <span class="text-gray-700 dark:text-gray-400">Archivo</span>
-        <input wire:model="archivo" type="file" id="archivo" style="opacity: 0; width: 0.1px; height: 0.1px;">
-        <label class="btn btn-info btn-sm link-light"  for="archivo">{{$this->archivo?'Seleccionar otro archivo':'Seleccionar archivo'}}</label>
+        <input type="file" wire:model="archivo" id="archivo" name="archivo" style="opacity: 0; width: 0.1px; height: 0.1px;">
         @error('archivo')
         <span class="text-xs text-red-600 dark:text-red-400">
             {{$message}}
         </span>
         @enderror
     </label>
-
+    @section('scripts')
+    <script>
+        const inputElement = document.querySelector('input[id="archivo"]');
+        const pond = FilePond.create( inputElement );
+        FilePond.setOptions({
+            server: {
+                url: '/upload',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            } 
+        });
+    </script>
+    @endsection
 </div>

@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use App\Models\Archivo;
+use App\Models\TemporaryFile;
 
 class Archivos extends Component
 {
@@ -24,12 +25,6 @@ class Archivos extends Component
 
     protected $queryString = ['sortField', 'sortDirection'];
 
-    protected $rules = [
-        'nombre'      => ['required','string','min:4'],
-        'descripcion' => ['required'],
-        'archivo'     => ['required','file','max:5000'],
-    ];
-
     public function sortBy($field)
     {
         if($this->sortField === $field){
@@ -44,8 +39,14 @@ class Archivos extends Component
     {
         $this->usuario = auth()->user();
 
+        if($this->usuario->hasRole('Admin') || $this->usuario->hasRole('Super Admin')){
+            $archivos = Archivo::select();
+        }else{
+            $archivos = $this->usuario->archivos();
+        }
+
         return view('livewire.archivos.index',[
-                'archivos' => Archivo::search('nombre',$this->search)->sortBy($this->sortField, $this->sortDirection)->paginate(10),
+                'archivos' => $archivos->search('nombre',$this->search)->sortBy($this->sortField, $this->sortDirection)->paginate(10),
             ])->layout('layouts.admin');
     }
 
@@ -54,25 +55,19 @@ class Archivos extends Component
         $validated = $this->validate([
             'nombre'      => ['required','string','min:4'],
             'descripcion' => ['required'],
-            'archivo'     => ['required','file','max:5000'],
         ],[
             'nombre.required'        => 'Este campo es obligatorio',
             'descripcion.required'   => 'Este campo es obligatorio',
-            'archivo.max'            => 'El archivo no debe pesar más de 5MB',
-            'archivo.file'           => 'Solo pueden subir archivos',
         ]);
 
-        $filename = sha1(time().time()).'.'.$this->archivo->getClientOriginalExtension();
-        $filepath = $this->archivo->storeAs('uploads',$filename,'public');
+        $file = TemporaryFile::all()->last();
 
-        $data = [
+        $archivo = Archivo::create([
             'nombre'      => $this->nombre,
             'descripcion' => $this->descripcion,
-            'archivo'     => 'storage/'.$filepath,
-            'usuario_id'  => $this->usuario->id
-        ];
-
-        $archivo = Archivo::create($data);
+            'usuario_id'  => $this->usuario->id,
+            'archivo'     => $file->filename,
+        ]);
 
         $this->createArchivo = false;
         $this->resetInput();
@@ -84,11 +79,13 @@ class Archivos extends Component
         $this->selected_id  = $archivo->id;
         $this->nombre       = $archivo->nombre;
         $this->descripcion  = $archivo->descripcion;
-        $this->archivo      = $archivo->archivo;
 
         if($tipo === 'update'){
             $this->updateArchivo = true;
-        }else{
+        }else if($tipo === 'show'){
+            $this->showArchivo = true;
+        }
+        else{
             $this->deleteArchivo = true;
         }
     }
@@ -98,12 +95,9 @@ class Archivos extends Component
         $validated = $this->validate([
             'nombre'      => ['required','string','min:4'],
             'descripcion' => ['required'],
-            'archivo'     => ['required','file','max:5000'],
         ],[
             'nombre.required'        => 'Este campo es obligatorio',
             'descripcion.required'   => 'Este campo es obligatorio',
-            'archivo.max'            => 'El archivo no debe pesar más de 5MB',
-            'archivo.file'           => 'Solo pueden subir archivos',
         ]);
 
         $archivo = Archivo::findOrFail($this->selected_id);
