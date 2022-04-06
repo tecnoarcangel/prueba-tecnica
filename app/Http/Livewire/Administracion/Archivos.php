@@ -79,6 +79,7 @@ class Archivos extends Component
         $this->selected_id  = $archivo->id;
         $this->nombre       = $archivo->nombre;
         $this->descripcion  = $archivo->descripcion;
+        $this->archivo      = $archivo->archivo;
 
         if($tipo === 'update'){
             $this->updateArchivo = true;
